@@ -1,6 +1,7 @@
-# flutter_golden_test
+# Mastering flutter_golden_tests within 60 minitus
 
-A new Flutter project.
+This page is the source for creating a Udemy course on Flutter Golden Tests. The course can be found below.
+[Japanese]
 
 ## Getting Started
 

@@ -7,10 +7,8 @@ import 'package:golden_toolkit/golden_toolkit.dart';
 import 'package:flutter_golden_test/main.dart';
 
 /*
-
-
-
-
+flutter test --update-goldens
+flutter test
  */
 
 void main() {
@@ -125,5 +123,36 @@ void main() {
       'myAppMulti1',
       devices: devices,
     );
+  });
+
+  testGoldens('multi devices, multi scenarios', (tester) async {
+    final builder = DeviceBuilder()
+      ..overrideDevicesForAllScenarios(devices: [iPhone55, iPhone65, iPad129])
+      ..addScenario(widget: MyApp(), name: 'no tap')
+      ..addScenario(
+          widget: MyApp(),
+          name: 'tap once',
+          onCreate: (Key scenarioWidgetKey) async {
+            final finder = find.descendant(
+                of: find.byKey(scenarioWidgetKey),
+                matching: find.byIcon(Icons.add));
+            await tester.tap(finder);
+          })
+      ..addScenario(
+          widget: MyApp(),
+          name: 'tap five times',
+          onCreate: (Key scenarioWidgetKey) async {
+            final finder = find.descendant(
+                of: find.byKey(scenarioWidgetKey),
+                matching: find.byIcon(Icons.add));
+            await tester.tap(finder);
+            await tester.tap(finder);
+            await tester.tap(finder);
+            await tester.tap(finder);
+            await tester.tap(finder);
+          });
+
+    await tester.pumpDeviceBuilder(builder);
+    await screenMatchesGolden(tester, 'multiDevicesMultiScenario');
   });
 }
