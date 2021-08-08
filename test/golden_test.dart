@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:golden_toolkit/golden_toolkit.dart';
 
 // Test Target file. Change here for your target.
 import 'package:flutter_golden_test/main.dart';
+import 'dart:io';
 
 /*
 flutter test --update-goldens
@@ -22,6 +24,13 @@ void main() {
   testWidgets('description', (WidgetTester tester) async {});
 
   setUpAll(() async {
+    final fontFile = File('test/assets/NotoSansJP-Regular.otf');
+    expect(fontFile.existsSync(), true);
+    final fontData = await fontFile.readAsBytes();
+    final fontLoader = FontLoader('NotoSansJP');
+    fontLoader.addFont(Future.value(ByteData.view(fontData.buffer)));
+    await fontLoader.load();
+
     await loadAppFonts();
   });
 
